@@ -1,7 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 import pickle as pkl
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 fields = [
@@ -19,11 +22,13 @@ with open("./model.pkl", "rb") as file:
     model = pkl.load(file)
 
 
+@cross_origin()
 @app.route("/", methods=["GET"])
 def home():
     return jsonify(message="Working!")
 
 
+@cross_origin()
 @app.route("/predict", methods=["POST"])
 def predict():
     data = []
