@@ -1,6 +1,13 @@
 import axios from "axios";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Button, Container, FloatingLabel, Form, Row } from "react-bootstrap";
+import {
+    Button,
+    Container,
+    FloatingLabel,
+    Form,
+    Row,
+    Spinner,
+} from "react-bootstrap";
 import { BACKEND_URI } from "./constants";
 
 interface FormFields {
@@ -165,7 +172,14 @@ function App() {
                     </FloatingLabel>
                     <Row>
                         <Button type="submit" disabled={processing}>
-                            Predict
+                            {processing && (
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">
+                                        Loading...
+                                    </span>
+                                </Spinner>
+                            )}
+                            {!processing && "Predict"}
                         </Button>
                     </Row>
                 </Form>
