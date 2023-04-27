@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ChangeEvent, FormEvent, useState } from "react";
 import {
+    Alert,
     Button,
     Container,
     FloatingLabel,
@@ -33,6 +34,8 @@ function App() {
 
     const [form, setForm] = useState<FormFields>(emptyForm);
     const [processing, setProcessing] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
+    const [messageType, setMessageTypre] = useState<string>("danger");
 
     const handleOnSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -41,6 +44,18 @@ function App() {
             .post(`${BACKEND_URI}/predict`, form)
             .then((resp) => {
                 console.log(resp.data);
+                const prediction = resp.data.prediction;
+                if (prediction === "0") {
+                    setMessage(
+                        "Congratulations! According to our model, you don't have the disease 💗"
+                    );
+                    setMessageTypre("success");
+                } else {
+                    setMessage(
+                        "Sorry to say it, but according to our model, you do have the disease 💀"
+                    );
+                    setMessageTypre("danger");
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -56,6 +71,18 @@ function App() {
                 <h1 className="text-center">Cardiovascular-Prediction</h1>
             </Row>
             <hr />
+            {message.length > 0 && (
+                <Row className="m-2">
+                    <Alert
+                        dismissible
+                        show={message.length > 0}
+                        onClose={() => setMessage("")}
+                        variant={messageType}
+                    >
+                        {message}
+                    </Alert>
+                </Row>
+            )}
             <Row className="m-2">
                 <Form onSubmit={handleOnSubmit}>
                     <FloatingLabel className="my-2" label={"Height"}>
