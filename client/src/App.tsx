@@ -25,9 +25,11 @@ function App() {
     };
 
     const [form, setForm] = useState<FormFields>(emptyForm);
+    const [processing, setProcessing] = useState<boolean>(false);
 
     const handleOnSubmit = (e: FormEvent) => {
         e.preventDefault();
+        setProcessing(true);
         axios
             .post(`${BACKEND_URI}/predict`, form)
             .then((resp) => {
@@ -35,6 +37,9 @@ function App() {
             })
             .catch((err) => {
                 console.log(err);
+            })
+            .finally(() => {
+                setProcessing(false);
             });
     };
 
@@ -44,123 +49,127 @@ function App() {
                 <h1 className="text-center">Cardiovascular-Prediction</h1>
             </Row>
             <hr />
-            <Form onSubmit={handleOnSubmit}>
-                <FloatingLabel label={"Height"}>
-                    <Form.Control
-                        type="number"
-                        value={form.height}
-                        id="height"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <FloatingLabel label={"Sbp"}>
-                    <Form.Control
-                        type="number"
-                        value={form.sbp}
-                        id="sbp"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <FloatingLabel label={"Dbp"}>
-                    <Form.Control
-                        type="number"
-                        value={form.dbp}
-                        id="dbp"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <FloatingLabel label={"Cholestrol"}>
-                    <Form.Control
-                        type="number"
-                        value={form.cholestrol}
-                        id="cholestrol"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <FloatingLabel label={"Active"}>
-                    <Form.Control
-                        type="number"
-                        value={form.active}
-                        id="active"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <FloatingLabel label={"Age"}>
-                    <Form.Control
-                        type="number"
-                        value={form.age}
-                        id="age"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <FloatingLabel label={"Pulse"}>
-                    <Form.Control
-                        type="number"
-                        value={form.pulse}
-                        id="pulse"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            e.preventDefault();
-                            setForm((old) => {
-                                return {
-                                    ...old,
-                                    [e.target.id]: e.target.value,
-                                };
-                            });
-                        }}
-                    ></Form.Control>
-                </FloatingLabel>
-                <Row>
-                    <Button type="submit">Predict</Button>
-                </Row>
-            </Form>
+            <Row className="m-2">
+                <Form onSubmit={handleOnSubmit}>
+                    <FloatingLabel className="my-2" label={"Height"}>
+                        <Form.Control
+                            type="number"
+                            value={form.height}
+                            id="height"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <FloatingLabel className="my-2" label={"Sbp"}>
+                        <Form.Control
+                            type="number"
+                            value={form.sbp}
+                            id="sbp"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <FloatingLabel className="my-2" label={"Dbp"}>
+                        <Form.Control
+                            type="number"
+                            value={form.dbp}
+                            id="dbp"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <FloatingLabel className="my-2" label={"Cholestrol"}>
+                        <Form.Control
+                            type="number"
+                            value={form.cholestrol}
+                            id="cholestrol"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <FloatingLabel className="my-2" label={"Active"}>
+                        <Form.Control
+                            type="number"
+                            value={form.active}
+                            id="active"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <FloatingLabel className="my-2" label={"Age"}>
+                        <Form.Control
+                            type="number"
+                            value={form.age}
+                            id="age"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <FloatingLabel className="my-2" label={"Pulse"}>
+                        <Form.Control
+                            type="number"
+                            value={form.pulse}
+                            id="pulse"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                e.preventDefault();
+                                setForm((old) => {
+                                    return {
+                                        ...old,
+                                        [e.target.id]: e.target.value,
+                                    };
+                                });
+                            }}
+                        ></Form.Control>
+                    </FloatingLabel>
+                    <Row>
+                        <Button type="submit" disabled={processing}>
+                            Predict
+                        </Button>
+                    </Row>
+                </Form>
+            </Row>
         </Container>
     );
 }
