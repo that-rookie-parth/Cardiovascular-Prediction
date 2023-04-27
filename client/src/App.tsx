@@ -41,7 +41,10 @@ function App() {
         e.preventDefault();
         setProcessing(true);
         axios
-            .post(`${BACKEND_URI}/predict`, form)
+            .post(`${BACKEND_URI}/predict`, {
+                ...form,
+                pulse: form.sbp - form.dbp,
+            })
             .then((resp) => {
                 console.log(resp.data);
                 const prediction = resp.data.prediction;
@@ -170,22 +173,6 @@ function App() {
                             type="number"
                             value={form.age}
                             id="age"
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                e.preventDefault();
-                                setForm((old) => {
-                                    return {
-                                        ...old,
-                                        [e.target.id]: e.target.value,
-                                    };
-                                });
-                            }}
-                        ></Form.Control>
-                    </FloatingLabel>
-                    <FloatingLabel className="my-2" label={"Pulse"}>
-                        <Form.Control
-                            type="number"
-                            value={form.pulse}
-                            id="pulse"
                             onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 e.preventDefault();
                                 setForm((old) => {
