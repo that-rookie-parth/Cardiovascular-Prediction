@@ -2,17 +2,23 @@ import pickle as pkl
 import streamlit as st
 import numpy as np
 
-cholestrol_choice = ['Normal', 'Above Normal', 'Well Above Normal']
+cholestrol_choices = ['Normal', 'Above Normal', 'Well Above Normal']
+active_choices = ["Yes", "No"]
 
 st.title('Cardiovascular Disease Prediction :anatomical_heart:')
-age = st.number_input("Enter your age ( in Days )")
 height = st.number_input("Enter your height ( in cms )")
 sbp = st.number_input("Enter your Systolic Blood Pressure ( in mmHg )")
 dbp = st.number_input("Enter your Diastolic Blood Pressure ( in mmHg )")
+
 cholestrol = st.selectbox(
-    'Pick one', cholestrol_choice)
+    'Select your cholestron level', cholestrol_choices)
+
+active = st.selectbox(
+    'Are you physically active?', active_choices)
+
 age_y = st.number_input("Enter your age ( in Years )")
 pulse = st.number_input("Enter your pulse ( in pulse/sec )")
+
 
 with open("./model.pkl", "rb") as file:
     model = pkl.load(file)
@@ -20,19 +26,22 @@ with open("./model.pkl", "rb") as file:
 
 def predict():
     global cholestrol
-    cholestrol = cholestrol_choice.index(cholestrol)
+    global active
+    cholestrol = cholestrol_choices.index(cholestrol)
+    active = active_choices.index(active)
 
     features = list(
-        map(float, [0, age, height, sbp, dbp, cholestrol, age_y, pulse]))
+        map(float, [height, sbp, dbp, cholestrol, active, age_y, pulse]))
     features = [np.array(features)]
     prediction = model.predict(features)
     label = prediction[0]
 
-    print(type(label))
-    print(label)
-
-    st.success('Does the person die or survive? : ' +
-               str(label) + ' :thumbsup:')
+    if (label == 1):
+        st.warning(
+            "According to our machine learning model, we think that you do have the disease. :skull:")
+    else:
+        st.success(
+            "Congratulations! According to us, you don't have the disease. :heart_decoration:")
 
 
 trigger = st.button("Predict", on_click=predict)
