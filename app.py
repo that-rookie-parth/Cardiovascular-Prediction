@@ -1,6 +1,7 @@
 import pickle as pkl
 import streamlit as st
 import numpy as np
+from flask import Flask
 
 with open("./model.pkl", "rb") as file:
     model = pkl.load(file)
@@ -45,3 +46,11 @@ if not hasattr(st, 'already_started_server'):
     age_y = st.number_input("Enter your age ( in Years )")
     pulse = st.number_input("Enter your pulse ( in pulse/sec )")
     trigger = st.button("Predict", on_click=predict)
+
+    app = Flask(__name__)
+
+    @app.route('/foo')
+    def serve_foo():
+        return 'This page is served via Flask!'
+
+    app.run(port=8888)
