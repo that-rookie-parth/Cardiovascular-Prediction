@@ -1,24 +1,7 @@
 import pickle as pkl
 import streamlit as st
 import numpy as np
-
-cholestrol_choices = ['Normal', 'Above Normal', 'Well Above Normal']
-active_choices = ["Yes", "No"]
-
-st.title('Cardiovascular Disease Prediction :anatomical_heart:')
-height = st.number_input("Enter your height ( in cms )")
-sbp = st.number_input("Enter your Systolic Blood Pressure ( in mmHg )")
-dbp = st.number_input("Enter your Diastolic Blood Pressure ( in mmHg )")
-
-cholestrol = st.selectbox(
-    'Select your cholestron level', cholestrol_choices)
-
-active = st.selectbox(
-    'Are you physically active?', active_choices)
-
-age_y = st.number_input("Enter your age ( in Years )")
-pulse = st.number_input("Enter your pulse ( in pulse/sec )")
-
+from flask import Flask
 
 with open("./model.pkl", "rb") as file:
     model = pkl.load(file)
@@ -44,4 +27,30 @@ def predict():
             "Congratulations! According to us, you don't have the disease. :heart_decoration:")
 
 
-trigger = st.button("Predict", on_click=predict)
+if not hasattr(st, 'already_started_server'):
+
+    cholestrol_choices = ['Normal', 'Above Normal', 'Well Above Normal']
+    active_choices = ["Yes", "No"]
+
+    st.title('Cardiovascular Disease Prediction :anatomical_heart:')
+    height = st.number_input("Enter your height ( in cms )")
+    sbp = st.number_input("Enter your Systolic Blood Pressure ( in mmHg )")
+    dbp = st.number_input("Enter your Diastolic Blood Pressure ( in mmHg )")
+
+    cholestrol = st.selectbox(
+        'Select your cholestron level', cholestrol_choices)
+
+    active = st.selectbox(
+        'Are you physically active?', active_choices)
+
+    age_y = st.number_input("Enter your age ( in Years )")
+    pulse = st.number_input("Enter your pulse ( in pulse/sec )")
+    trigger = st.button("Predict", on_click=predict)
+
+    app = Flask(__name__)
+
+    @app.route('/foo')
+    def serve_foo():
+        return 'This page is served via Flask!'
+
+    app.run(port=8888)
